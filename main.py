@@ -7,19 +7,19 @@ import os
 
 
 def downloaded_image(link):
-    headers = {'user-agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36"}
+    headers = {'user-agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36"}
     html = requests.get(link, headers=headers)
     soup = BeautifulSoup(html.text, features="html.parser")
     image = soup.find('img', {'class': 'no-click screenshot-image'}).get('src')
     downloaded_images = 0
-
     if image.startswith('//st.') == False:
         downloaded_images += 1
         with open(f'images/{link[-6:]}.png', 'wb') as f:
             f.write(requests.get(image).content)
     return downloaded_images
 
-def generation_link(links_amount):
+
+def generation_link(amount):
     chars = 'qwertyuiopasdfghjklzxcvbnm'
     digits = '123456789'
     links = ['https://prnt.sc/' + ''.join(choice(chars + digits) for symbol in range(6)) for i in range(amount)]
@@ -38,9 +38,4 @@ if __name__ == '__main__':
     pool.close()
     pool.join()
     os.system('clear')
-    print(f'''\n
-    Downloaded: {downloaded_images}
-    Error:\t{download_errors}
-
-    Runtime:\t{int(time.time() - start_time)} seconds.''')
-    input('')
+    print(f'\n\tDownloaded: {downloaded_images}\n\tError:\t{download_errors}\n\n\tRuntime:\t{int(time.time() - start_time)} seconds.')
